@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_food_delivery_backend/blocs/blocs.dart';
-import 'package:flutter_food_delivery_backend/config/theme.dart';
-import 'package:flutter_food_delivery_backend/models/category_model.dart';
+import '/blocs/blocs.dart';
+import '/config/theme.dart';
 
+import 'models/models.dart';
 import 'screens/screens.dart';
 
 void main() {
@@ -18,9 +18,16 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => CategoryBloc()
+          create: (context) => CategoryBloc()
             ..add(
               LoadCategories(categories: Category.categories),
+            ),
+        ),
+        BlocProvider(
+          create: (context) => ProductBloc(
+            categoryBloc: BlocProvider.of<CategoryBloc>(context),
+          )..add(
+              LoadProducts(products: Product.products),
             ),
         ),
       ],

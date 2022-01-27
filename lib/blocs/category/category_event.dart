@@ -4,7 +4,7 @@ abstract class CategoryEvent extends Equatable {
   const CategoryEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class LoadCategories extends CategoryEvent {
@@ -13,7 +13,16 @@ class LoadCategories extends CategoryEvent {
   const LoadCategories({this.categories = const <Category>[]});
 
   @override
-  List<Object> get props => [categories];
+  List<Object?> get props => [categories];
+}
+
+class SelectCategory extends CategoryEvent {
+  final Category? category;
+
+  const SelectCategory(this.category);
+
+  @override
+  List<Object?> get props => [category];
 }
 
 class SortCategories extends CategoryEvent {
@@ -26,5 +35,5 @@ class SortCategories extends CategoryEvent {
   });
 
   @override
-  List<Object> get props => [oldIndex, newIndex];
+  List<Object?> get props => [oldIndex, newIndex];
 }

@@ -8,6 +8,7 @@ part 'category_state.dart';
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   CategoryBloc() : super(CategoryLoading()) {
     on<LoadCategories>(_onLoadCategories);
+    on<SelectCategory>(_onSelectCategory);
     on<SortCategories>(_onSortCategories);
   }
 
@@ -19,6 +20,20 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       const Duration(seconds: 1),
     );
     emit(CategoryLoaded(categories: event.categories));
+  }
+
+  void _onSelectCategory(
+    SelectCategory event,
+    Emitter<CategoryState> emit,
+  ) async {
+    final state = this.state as CategoryLoaded;
+
+    emit(
+      CategoryLoaded(
+        categories: state.categories,
+        selectedCategory: event.category,
+      ),
+    );
   }
 
   void _onSortCategories(

@@ -1,8 +1,10 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_food_delivery_backend/blocs/blocs.dart';
-import 'package:flutter_food_delivery_backend/config/responsive.dart';
-import 'package:flutter_food_delivery_backend/models/models.dart';
+import '/blocs/blocs.dart';
+import '/config/responsive.dart';
+import '/models/models.dart';
+
 import '/widgets/widgets.dart';
 
 class MenuScreen extends StatelessWidget {
@@ -129,9 +131,42 @@ class MenuScreen extends StatelessWidget {
             'Products',
             style: Theme.of(context).textTheme.headline4,
           ),
-          ...Product.products.map((product) {
-            return ProductListTile(product: product);
-          }).toList(),
+          const SizedBox(height: 20),
+          BlocBuilder<ProductBloc, ProductState>(
+            builder: (context, state) {
+              if (state is ProductLoading) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                );
+              }
+              if (state is ProductLoaded) {
+                return ReorderableListView(
+                  shrinkWrap: true,
+                  children: [
+                    for (int index = 0; index < state.products.length; index++,)
+                      ProductListTile(
+                        product: state.products[index],
+                        key: ValueKey(
+                          Random().nextInt(10000),
+                        ),
+                      ),
+                  ],
+                  onReorder: (oldIndex, newIndex) {
+                    context.read<ProductBloc>().add(
+                          SortProducts(
+                            oldIndex: oldIndex,
+                            newIndex: newIndex,
+                          ),
+                        );
+                  },
+                );
+              } else {
+                return const Text('Something went wrong.');
+              }
+            },
+          ),
         ],
       ),
     );
@@ -160,21 +195,33 @@ class MenuScreen extends StatelessWidget {
                 );
               }
               if (state is CategoryLoaded) {
-                return ReorderableListView.builder(
-                    shrinkWrap: true,
-                    onReorder: (oldIndex, newIndex) {
-                      context.read<CategoryBloc>().add(
-                            SortCategories(
-                                oldIndex: oldIndex, newIndex: newIndex),
-                          );
-                    },
-                    itemCount: state.categories.length,
-                    itemBuilder: (context, index) {
-                      return CategoryListTile(
+                return ReorderableListView(
+                  shrinkWrap: true,
+                  children: [
+                    for (int index = 0;
+                        index < state.categories.length;
+                        index++,)
+                      CategoryListTile(
                         category: state.categories[index],
-                        key: ValueKey(index),
-                      );
-                    });
+                        onTap: () {
+                          context.read<CategoryBloc>().add(
+                                SelectCategory(state.categories[index]),
+                              );
+                        },
+                        key: ValueKey(
+                          Random().nextInt(10000),
+                        ),
+                      ),
+                  ],
+                  onReorder: (oldIndex, newIndex) {
+                    context.read<CategoryBloc>().add(
+                          SortCategories(
+                            oldIndex: oldIndex,
+                            newIndex: newIndex,
+                          ),
+                        );
+                  },
+                );
               } else {
                 return const Text('Something went wrong.');
               }
