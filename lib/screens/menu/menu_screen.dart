@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_food_delivery_backend/blocs/blocs.dart';
 import 'package:flutter_food_delivery_backend/config/responsive.dart';
 import 'package:flutter_food_delivery_backend/models/models.dart';
 import '/widgets/widgets.dart';
@@ -148,9 +150,36 @@ class MenuScreen extends StatelessWidget {
             style: Theme.of(context).textTheme.headline4,
           ),
           const SizedBox(height: 20),
-          ...Category.categories.map((category) {
-            return CategoryListTile(category: category);
-          }).toList(),
+          BlocBuilder<CategoryBloc, CategoryState>(
+            builder: (context, state) {
+              if (state is CategoryLoading) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                );
+              }
+              if (state is CategoryLoaded) {
+                return ReorderableListView.builder(
+                    shrinkWrap: true,
+                    onReorder: (oldIndex, newIndex) {
+                      context.read<CategoryBloc>().add(
+                            SortCategories(
+                                oldIndex: oldIndex, newIndex: newIndex),
+                          );
+                    },
+                    itemCount: state.categories.length,
+                    itemBuilder: (context, index) {
+                      return CategoryListTile(
+                        category: state.categories[index],
+                        key: ValueKey(index),
+                      );
+                    });
+              } else {
+                return const Text('Something went wrong.');
+              }
+            },
+          ),
         ],
       ),
     );

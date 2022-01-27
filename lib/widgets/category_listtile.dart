@@ -12,6 +12,9 @@ class CategoryListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: () {
+        print(category.name);
+      },
       leading: Image.asset(
         category.imageUrl,
         height: 25,
@@ -20,11 +23,13 @@ class CategoryListTile extends StatelessWidget {
         category.name,
         style: Theme.of(context).textTheme.headline5,
       ),
-      subtitle: Text(
-        category.description,
-        style: Theme.of(context).textTheme.headline6,
+      subtitle: Padding(
+        padding: const EdgeInsets.only(right: 8.0),
+        child: Text(
+          category.description,
+          style: Theme.of(context).textTheme.headline6,
+        ),
       ),
-      trailing: const Icon(Icons.menu),
     );
   }
 }
