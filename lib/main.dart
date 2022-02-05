@@ -30,6 +30,12 @@ class MyApp extends StatelessWidget {
               LoadProducts(products: Product.products),
             ),
         ),
+        BlocProvider(
+          create: (context) => OpeningHoursBloc()
+            ..add(
+              LoadOpeningHours(openingHoursList: OpeningHours.openingHoursList),
+            ),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -38,7 +44,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/menu': (context) => const MenuScreen(),
           // '/dash': (context) => const DashboardScreen(),
-          // '/opening-hours': (context) => const OpeningHoursScreen(),
+          '/opening-hours': (context) => const OpeningHoursScreen(),
         },
       ),
     );
