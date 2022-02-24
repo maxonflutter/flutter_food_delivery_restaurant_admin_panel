@@ -20,14 +20,13 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<SortProducts>(_onSortProducts);
 
     _categorySubscription = _categoryBloc.stream.listen((state) {
-      if ((state as CategoryLoaded).selectedCategory == null) {
-      } else {
+      if (state is CategoryLoaded && state.selectedCategory != null) {
         add(
           UpdateProducts(
             category: (state.selectedCategory!),
           ),
         );
-      }
+      } else {}
     });
   }
 
