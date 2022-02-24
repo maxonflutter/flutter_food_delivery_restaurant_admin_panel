@@ -55,13 +55,15 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   void _onSortProducts(
     SortProducts event,
     Emitter<ProductState> emit,
-  ) {
-    final state = this.state;
+  ) async {
+    final state = this.state as ProductLoaded;
+    emit(ProductLoading());
+    await Future<void>.delayed(const Duration(seconds: 1));
 
     int newIndex =
         (event.newIndex > event.oldIndex) ? event.newIndex - 1 : event.newIndex;
 
-    if (state is ProductLoaded) {
+    try {
       Product selectedProduct = state.products[event.oldIndex];
 
       List<Product> sortedProducts = List.from(state.products)
@@ -71,7 +73,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       emit(
         ProductLoaded(products: sortedProducts),
       );
-    }
+    } catch (_) {}
   }
 
   @override
