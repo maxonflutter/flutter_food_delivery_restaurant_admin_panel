@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_food_delivery_backend/blocs/blocs.dart';
-import 'package:flutter_food_delivery_backend/models/models.dart';
+import 'package:flutter_food_delivery_backend/config/responsive.dart';
+import '/models/models.dart';
 
 class OpeningHoursSettings extends StatelessWidget {
   const OpeningHoursSettings({
@@ -16,46 +16,98 @@ class OpeningHoursSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = Responsive.isMobile(context) ? 110 : 55;
+    double sliderWidth = Responsive.isWideDesktop(context) ? 500 : 300;
+    EdgeInsets padding = Responsive.isMobile(context)
+        ? const EdgeInsets.all(10.0)
+        : const EdgeInsets.all(20.0);
+
     return Container(
-      height: 55,
+      height: height,
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(20.0),
+      padding: padding,
       color: Theme.of(context).colorScheme.background,
-      child: Row(
-        children: [
-          Checkbox(
-            value: openingHours.isOpen,
-            onChanged: onCheckboxChanged,
-            activeColor: Theme.of(context).colorScheme.primary,
-            fillColor: MaterialStateProperty.all(
-              Theme.of(context).colorScheme.primary,
+      child: Responsive.isMobile(context)
+          ? Column(
+              children: [
+                Row(
+                  children: [
+                    _buildCheckbox(context),
+                    const SizedBox(width: 10),
+                    _buildText(context),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                _buildSlider(context, sliderWidth),
+              ],
+            )
+          : Row(
+              children: [
+                _buildCheckbox(context),
+                const SizedBox(width: 10),
+                _buildSlider(context, sliderWidth),
+                const SizedBox(width: 10),
+                _buildText(context),
+              ],
             ),
+    );
+  }
+
+  Row _buildCheckbox(BuildContext context) {
+    return Row(
+      children: [
+        Checkbox(
+          value: openingHours.isOpen,
+          onChanged: onCheckboxChanged,
+          activeColor: Theme.of(context).colorScheme.primary,
+          fillColor: MaterialStateProperty.all(
+            Theme.of(context).colorScheme.primary,
           ),
-          const SizedBox(width: 10),
-          SizedBox(
-            width: 100,
-            child: Text(
-              openingHours.day,
+        ),
+        const SizedBox(width: 10),
+        SizedBox(
+          width: 100,
+          child: Text(
+            openingHours.day,
+            style: Theme.of(context).textTheme.headline5,
+          ),
+        ),
+      ],
+    );
+  }
+
+  SizedBox _buildSlider(
+    BuildContext context,
+    double sliderWidth,
+  ) {
+    return SizedBox(
+      width: sliderWidth,
+      child: RangeSlider(
+        divisions: 24,
+        values: RangeValues(
+          openingHours.openAt,
+          openingHours.closeAt,
+        ),
+        min: 0,
+        max: 24,
+        onChanged: onSliderChanged,
+      ),
+    );
+  }
+
+  SizedBox _buildText(BuildContext context) {
+    return SizedBox(
+      width: 125,
+      child: openingHours.isOpen
+          ? Text(
+              'Open from ${openingHours.openAt} to ${openingHours.closeAt}',
+              style: Theme.of(context).textTheme.headline5,
+            )
+          : Text(
+              'Closed on ${openingHours.day}',
               style: Theme.of(context).textTheme.headline5,
             ),
-          ),
-          const SizedBox(width: 10),
-          SizedBox(
-            width: 500,
-            child: RangeSlider(
-              divisions: 24,
-              values: RangeValues(
-                openingHours.openAt,
-                openingHours.closeAt,
-              ),
-              min: 0,
-              max: 24,
-              onChanged: onSliderChanged,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
