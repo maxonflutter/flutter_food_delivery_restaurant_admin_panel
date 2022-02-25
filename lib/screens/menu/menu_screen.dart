@@ -101,7 +101,7 @@ class MenuScreen extends StatelessWidget {
                       ProductListTile(
                         product: state.products[index],
                         key: ValueKey(
-                          Random().nextInt(10000),
+                          state.products[index].id,
                         ),
                       ),
                   ],
@@ -160,9 +160,7 @@ class MenuScreen extends StatelessWidget {
                                 SelectCategory(state.categories[index]),
                               );
                         },
-                        key: ValueKey(
-                          Random().nextInt(10000),
-                        ),
+                        key: ValueKey(state.categories[index].id),
                       ),
                   ],
                   onReorder: (oldIndex, newIndex) {
