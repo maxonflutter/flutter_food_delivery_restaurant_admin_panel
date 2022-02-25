@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_food_delivery_backend/blocs/blocs.dart';
-import 'package:flutter_food_delivery_backend/models/models.dart';
 
+import '/blocs/blocs.dart';
 import '/widgets/widgets.dart';
 
 class OpeningHoursScreen extends StatelessWidget {
@@ -30,68 +29,27 @@ class OpeningHoursScreen extends StatelessWidget {
                   shrinkWrap: true,
                   itemCount: state.openingHoursList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      height: 55,
-                      width: double.infinity,
-                      margin: const EdgeInsets.only(bottom: 10),
-                      padding: const EdgeInsets.all(20.0),
-                      color: Theme.of(context).colorScheme.background,
-                      child: Row(
-                        children: [
-                          Checkbox(
-                            value: state.openingHoursList[index].isOpen,
-                            onChanged: (value) {
-                              context.read<OpeningHoursBloc>().add(
-                                    UpdateOpeningHours(
-                                      openingHours: state
-                                          .openingHoursList[index]
-                                          .copyWith(
-                                        isOpen: !state
-                                            .openingHoursList[index].isOpen,
-                                      ),
-                                    ),
-                                  );
-                            },
-                            activeColor: Theme.of(context).colorScheme.primary,
-                            fillColor: MaterialStateProperty.all(
-                              Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          SizedBox(
-                            width: 100,
-                            child: Text(
-                              state.openingHoursList[index].day,
-                              style: Theme.of(context).textTheme.headline5,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          SizedBox(
-                            width: 500,
-                            child: RangeSlider(
-                              divisions: 24,
-                              values: RangeValues(
-                                state.openingHoursList[index].openAt,
-                                state.openingHoursList[index].closeAt,
+                    var openingHours = state.openingHoursList[index];
+                    return OpeningHoursSettings(
+                      openingHours: openingHours,
+                      onCheckboxChanged: (value) {
+                        context.read<OpeningHoursBloc>().add(
+                              UpdateOpeningHours(
+                                openingHours: openingHours.copyWith(
+                                    isOpen: !openingHours.isOpen),
                               ),
-                              min: 0,
-                              max: 24,
-                              onChanged: (value) {
-                                context.read<OpeningHoursBloc>().add(
-                                      UpdateOpeningHours(
-                                        openingHours: state
-                                            .openingHoursList[index]
-                                            .copyWith(
-                                          openAt: value.start,
-                                          closeAt: value.end,
-                                        ),
-                                      ),
-                                    );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
+                            );
+                      },
+                      onSliderChanged: (value) {
+                        context.read<OpeningHoursBloc>().add(
+                              UpdateOpeningHours(
+                                openingHours: openingHours.copyWith(
+                                  openAt: value.start,
+                                  closeAt: value.end,
+                                ),
+                              ),
+                            );
+                      },
                     );
                   },
                 );

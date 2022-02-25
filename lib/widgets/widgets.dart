@@ -4,3 +4,4 @@ export 'custom_layout.dart';
 export 'product_card.dart';
 export 'product_listtile.dart';
 export 'category_listtile.dart';
+export 'opening_hours_settings.dart';
