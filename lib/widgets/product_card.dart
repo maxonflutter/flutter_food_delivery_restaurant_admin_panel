@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_food_delivery_backend/models/models.dart';
+import 'package:flutter_food_delivery_backend/widgets/widgets.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
@@ -25,7 +26,71 @@ class ProductCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Dialog(
+                          child: Container(
+                            height: 400,
+                            width: 500,
+                            padding: const EdgeInsets.all(20.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Add a Product',
+                                  style: Theme.of(context).textTheme.headline2,
+                                ),
+                                const SizedBox(height: 20),
+                                CustomTextFormField(
+                                  maxLines: 1,
+                                  title: 'Name',
+                                  hasTitle: true,
+                                  initialValue: '',
+                                  onChanged: (value) {},
+                                ),
+                                CustomTextFormField(
+                                  maxLines: 1,
+                                  title: 'Category',
+                                  hasTitle: true,
+                                  initialValue: '',
+                                  onChanged: (value) {},
+                                ),
+                                CustomTextFormField(
+                                  maxLines: 1,
+                                  title: 'Price',
+                                  hasTitle: true,
+                                  initialValue: '',
+                                  onChanged: (value) {},
+                                ),
+                                CustomTextFormField(
+                                  maxLines: 1,
+                                  title: 'Image URL',
+                                  hasTitle: true,
+                                  initialValue: '',
+                                  onChanged: (value) {},
+                                ),
+                                CustomTextFormField(
+                                  maxLines: 1,
+                                  title: 'Price',
+                                  hasTitle: true,
+                                  initialValue: '',
+                                  onChanged: (value) {},
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+
+                        // Container(
+                        //   width: 400,
+                        //   height: 400,
+                        //   color: Theme.of(context).colorScheme.background,
+                        // );
+                      },
+                    );
+                  },
                   iconSize: 40,
                   icon: Icon(
                     Icons.add_circle,
