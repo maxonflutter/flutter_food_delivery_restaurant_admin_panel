@@ -8,16 +8,16 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> screens = {
-      'Dashboard': {
-        'routeName': '/dash',
-        'icon': const Icon(Icons.dashboard),
-      },
+      // 'Dashboard': {
+      //   'routeName': '/dash',
+      //   'icon': const Icon(Icons.dashboard),
+      // },
       'Menu': {
         'routeName': '/menu',
         'icon': const Icon(Icons.menu_book),
       },
-      'Opening Hours': {
-        'routeName': '/opening-hours',
+      'Settings': {
+        'routeName': '/settings',
         'icon': const Icon(Icons.lock_clock),
       },
       'Logout': {
