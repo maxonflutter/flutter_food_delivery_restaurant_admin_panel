@@ -17,7 +17,6 @@ class OpeningHoursSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = Responsive.isMobile(context) ? 110 : 55;
-    double sliderWidth = Responsive.isWideDesktop(context) ? 500 : 300;
     EdgeInsets padding = Responsive.isMobile(context)
         ? const EdgeInsets.all(10.0)
         : const EdgeInsets.all(20.0);
@@ -39,14 +38,18 @@ class OpeningHoursSettings extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 10),
-                _buildSlider(context, sliderWidth),
+                Expanded(
+                  child: _buildSlider(context),
+                ),
               ],
             )
           : Row(
               children: [
                 _buildCheckbox(context),
                 const SizedBox(width: 10),
-                _buildSlider(context, sliderWidth),
+                Expanded(
+                  child: _buildSlider(context),
+                ),
                 const SizedBox(width: 10),
                 _buildText(context),
               ],
@@ -77,22 +80,16 @@ class OpeningHoursSettings extends StatelessWidget {
     );
   }
 
-  SizedBox _buildSlider(
-    BuildContext context,
-    double sliderWidth,
-  ) {
-    return SizedBox(
-      width: sliderWidth,
-      child: RangeSlider(
-        divisions: 24,
-        values: RangeValues(
-          openingHours.openAt,
-          openingHours.closeAt,
-        ),
-        min: 0,
-        max: 24,
-        onChanged: onSliderChanged,
+  RangeSlider _buildSlider(BuildContext context) {
+    return RangeSlider(
+      divisions: 24,
+      values: RangeValues(
+        openingHours.openAt,
+        openingHours.closeAt,
       ),
+      min: 0,
+      max: 24,
+      onChanged: onSliderChanged,
     );
   }
 

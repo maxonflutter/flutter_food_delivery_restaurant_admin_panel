@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_food_delivery_backend/blocs/settings/settings_bloc.dart';
 import '/blocs/blocs.dart';
 import '/config/theme.dart';
 
@@ -31,9 +32,12 @@ class MyApp extends StatelessWidget {
             ),
         ),
         BlocProvider(
-          create: (context) => OpeningHoursBloc()
+          create: (context) => SettingsBloc()
             ..add(
-              LoadOpeningHours(openingHoursList: OpeningHours.openingHoursList),
+              LoadSettings(
+                restaurant:
+                    Restaurant(openingHours: OpeningHours.openingHoursList),
+              ),
             ),
         ),
       ],
@@ -43,8 +47,8 @@ class MyApp extends StatelessWidget {
         initialRoute: '/menu',
         routes: {
           '/menu': (context) => const MenuScreen(),
+          '/settings': (context) => const SettingsScreen(),
           // '/dash': (context) => const DashboardScreen(),
-          '/opening-hours': (context) => const OpeningHoursScreen(),
         },
       ),
     );
