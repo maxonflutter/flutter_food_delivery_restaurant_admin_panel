@@ -20,24 +20,7 @@ class MenuScreen extends StatelessWidget {
       body: CustomLayout(
         title: 'Restaurant Menu',
         widgets: [
-          SizedBox(
-            width: double.infinity,
-            height: 200,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: Product.products.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return ProductCard(
-                    product: Product.products[index],
-                    index: index,
-                  );
-                },
-              ),
-            ),
-          ),
+          _buildProductCarousel(),
           const SizedBox(height: 10),
           Responsive.isWideDesktop(context) || Responsive.isDesktop(context)
               ? Container(
@@ -68,6 +51,42 @@ class MenuScreen extends StatelessWidget {
                 ),
         ],
       ),
+    );
+  }
+
+  BlocBuilder<ProductBloc, ProductState> _buildProductCarousel() {
+    return BlocBuilder<ProductBloc, ProductState>(
+      builder: (context, state) {
+        if (state is ProductLoading) {
+          return Center(
+            child: CircularProgressIndicator(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          );
+        }
+        if (state is ProductLoaded) {
+          return SizedBox(
+            width: double.infinity,
+            height: 200,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: state.products.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ProductCard(
+                    product: state.products[index],
+                    index: index,
+                  );
+                },
+              ),
+            ),
+          );
+        } else {
+          return const Text('Something went wrong.');
+        }
+      },
     );
   }
 
