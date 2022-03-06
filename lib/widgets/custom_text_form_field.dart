@@ -37,9 +37,8 @@ class CustomTextFormField extends StatelessWidget {
               maxLines: maxLines,
               initialValue: initialValue,
               onChanged: onChanged,
-              onEditingComplete: () {
-                print('Done');
-              },
+              onEditingComplete: () {},
+              style: Theme.of(context).textTheme.headline6,
               decoration: InputDecoration(
                 isDense: true,
                 focusedBorder: OutlineInputBorder(

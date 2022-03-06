@@ -16,6 +16,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       : _categoryBloc = categoryBloc,
         super(ProductLoading()) {
     on<LoadProducts>(_onLoadProducts);
+    on<AddProduct>(_onAddProduct);
     on<UpdateProducts>(_onUpdateProducts);
     on<SortProducts>(_onSortProducts);
 
@@ -36,6 +37,22 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   ) async {
     await Future<void>.delayed(const Duration(seconds: 1));
     emit(ProductLoaded(products: event.products));
+  }
+
+  void _onAddProduct(
+    AddProduct event,
+    Emitter<ProductState> emit,
+  ) {
+    if (state is ProductLoaded) {
+      print('Adding Product');
+      emit(
+        ProductLoaded(
+          products: List.from((state as ProductLoaded).products)
+            ..add(event.product),
+        ),
+      );
+      print(state);
+    }
   }
 
   void _onUpdateProducts(
