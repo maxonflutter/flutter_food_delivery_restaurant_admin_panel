@@ -1,15 +1,34 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_food_delivery_backend/models/models.dart';
+
+import '../../repositories/repositories.dart';
 
 part 'settings_event.dart';
 part 'settings_state.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
-  SettingsBloc() : super(SettingsLoading()) {
+  final RestaurantRepository _restaurantRepository;
+  StreamSubscription? _restaurantSubscription;
+
+  SettingsBloc({
+    required RestaurantRepository restaurantRepository,
+  })  : _restaurantRepository = restaurantRepository,
+        super(SettingsLoading()) {
     on<LoadSettings>(_onLoadSettings);
     on<UpdateSettings>(_onUpdateSettings);
     on<UpdateOpeningHours>(_onUpdateOpeningHours);
+
+    _restaurantSubscription =
+        _restaurantRepository.getRestaurant().listen((restaurant) {
+      print(restaurant);
+
+      add(
+        LoadSettings(restaurant: restaurant),
+      );
+    });
   }
 
   void _onLoadSettings(
@@ -24,6 +43,9 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     UpdateSettings event,
     Emitter<SettingsState> emit,
   ) {
+    if (event.isUpdateComplete) {
+      _restaurantRepository.editRestaurantSettings(event.restaurant);
+    }
     emit(SettingsLoaded(event.restaurant));
   }
 
@@ -41,11 +63,19 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         },
       )).toList();
 
+      _restaurantRepository.editRestaurantOpeningHours(openingHoursList);
+
       emit(
         SettingsLoaded(
           state.restaurant.copyWith(openingHours: openingHoursList),
         ),
       );
     }
+  }
+
+  @override
+  Future<void> close() async {
+    _restaurantSubscription?.cancel();
+    super.close();
   }
 }

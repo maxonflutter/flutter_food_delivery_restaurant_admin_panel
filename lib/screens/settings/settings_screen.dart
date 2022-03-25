@@ -163,6 +163,14 @@ class SettingsScreen extends StatelessWidget {
                           ),
                         );
                   },
+                  onFocusChanged: (hasFocus) {
+                    context.read<SettingsBloc>().add(
+                          UpdateSettings(
+                            isUpdateComplete: true,
+                            restaurant: state.restaurant,
+                          ),
+                        );
+                  },
                 ),
               ],
             );
@@ -209,6 +217,14 @@ class SettingsScreen extends StatelessWidget {
                           ),
                         );
                   },
+                  onFocusChanged: (hasFocus) {
+                    context.read<SettingsBloc>().add(
+                          UpdateSettings(
+                            isUpdateComplete: true,
+                            restaurant: state.restaurant,
+                          ),
+                        );
+                  },
                 ),
                 CustomTextFormField(
                   maxLines: 1,
@@ -225,6 +241,14 @@ class SettingsScreen extends StatelessWidget {
                           ),
                         );
                   },
+                  onFocusChanged: (hasFocus) {
+                    context.read<SettingsBloc>().add(
+                          UpdateSettings(
+                            isUpdateComplete: true,
+                            restaurant: state.restaurant,
+                          ),
+                        );
+                  },
                 ),
                 CustomTextFormField(
                   maxLines: 1,
@@ -238,6 +262,14 @@ class SettingsScreen extends StatelessWidget {
                           UpdateSettings(
                             restaurant: state.restaurant
                                 .copyWith(tags: value.split(', ')),
+                          ),
+                        );
+                  },
+                  onFocusChanged: (hasFocus) {
+                    context.read<SettingsBloc>().add(
+                          UpdateSettings(
+                            isUpdateComplete: true,
+                            restaurant: state.restaurant,
                           ),
                         );
                   },

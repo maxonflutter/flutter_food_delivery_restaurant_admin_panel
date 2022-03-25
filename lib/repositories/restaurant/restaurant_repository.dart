@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_food_delivery_backend/models/restaurant_model.dart';
-import 'package:flutter_food_delivery_backend/repositories/restaurant/base_restaurant_repository.dart';
+
+import '/repositories/repositories.dart';
+import '/models/models.dart';
 
 class RestaurantRepository extends BaseRestaurantRepository {
   final FirebaseFirestore _firebaseFirestore;
@@ -16,9 +17,41 @@ class RestaurantRepository extends BaseRestaurantRepository {
   }
 
   @override
-  Future<void> editRestaurant() {
-    // TODO: implement editRestaurant
-    throw UnimplementedError();
+  Future<void> editRestaurantSettings(Restaurant restaurant) async {
+    await _firebaseFirestore
+        .collection('restaurants')
+        .doc('MbyvrvKY1hdNohNU11EL')
+        .update(restaurant.toDocument());
+  }
+
+  @override
+  Future<void> editRestaurantOpeningHours(
+    List<OpeningHours> openingHours,
+  ) async {
+    await _firebaseFirestore
+        .collection('restaurants')
+        .doc('MbyvrvKY1hdNohNU11EL')
+        .update({
+      'openingHours': openingHours.map(
+        (openingHour) {
+          return openingHour.toDocument();
+        },
+      ).toList(),
+    });
+  }
+
+  @override
+  Future<void> editProducts(List<Product> products) async {
+    await _firebaseFirestore
+        .collection('restaurants')
+        .doc('MbyvrvKY1hdNohNU11EL')
+        .update({
+      'products': products.map(
+        (product) {
+          return product.toDocument();
+        },
+      ).toList(),
+    });
   }
 
   @override

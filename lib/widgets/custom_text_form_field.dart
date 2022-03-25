@@ -6,6 +6,7 @@ class CustomTextFormField extends StatelessWidget {
   final bool hasTitle;
   final String initialValue;
   final Function(String)? onChanged;
+  final Function(bool)? onFocusChanged;
 
   const CustomTextFormField({
     Key? key,
@@ -14,6 +15,7 @@ class CustomTextFormField extends StatelessWidget {
     required this.hasTitle,
     required this.initialValue,
     required this.onChanged,
+    this.onFocusChanged,
   }) : super(key: key);
 
   @override
@@ -33,25 +35,28 @@ class CustomTextFormField extends StatelessWidget {
               : const SizedBox(),
           SizedBox(width: hasTitle ? 20 : 0),
           Expanded(
-            child: TextFormField(
-              maxLines: maxLines,
-              initialValue: initialValue,
-              onChanged: onChanged,
-              onEditingComplete: () {},
-              style: Theme.of(context).textTheme.headline6,
-              decoration: InputDecoration(
-                isDense: true,
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.primary,
+            child: Focus(
+              child: TextFormField(
+                maxLines: maxLines,
+                initialValue: initialValue,
+                onChanged: onChanged,
+                onEditingComplete: () {},
+                style: Theme.of(context).textTheme.headline6,
+                decoration: InputDecoration(
+                  isDense: true,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.onBackground,
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.onBackground,
+                    ),
                   ),
                 ),
               ),
+              onFocusChange: onFocusChanged ?? (hasFocus) {},
             ),
           ),
         ],
