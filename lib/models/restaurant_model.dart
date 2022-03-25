@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 import '/models/models.dart';
@@ -56,6 +59,64 @@ class Restaurant extends Equatable {
       categories: categories ?? this.categories,
       products: products ?? this.products,
       openingHours: openingHours ?? this.openingHours,
+    );
+  }
+
+  Map<String, dynamic> toDocument() {
+    return {
+      'id': id ?? '',
+      'name': name ?? '',
+      'imageUrl': imageUrl ?? '',
+      'description': description ?? '',
+      'tags': tags ?? [],
+      'categories': categories!.map(
+        (category) {
+          return category.toDocument();
+        },
+      ).toList(),
+      'products': products!.map(
+        (product) {
+          return product.toDocument();
+        },
+      ).toList(),
+      'openingHours': openingHours!.map(
+        (openingHour) {
+          return openingHour.toDocument();
+        },
+      ).toList(),
+    };
+  }
+
+  String toJson() => json.encode(toDocument());
+
+  // factory RestaurantOne.fromJson(String source) => RestaurantOne.fromMap(json.decode(source));
+
+  factory Restaurant.fromSnapshot(DocumentSnapshot snap) {
+    return Restaurant(
+      id: snap.id,
+      name: snap['name'],
+      imageUrl: snap['imageUrl'],
+      description: snap['description'],
+      tags: (snap['tags'] as List).map(
+        (tag) {
+          return tag as String;
+        },
+      ).toList(),
+      categories: (snap['categories'] as List).map(
+        (category) {
+          return Category.fromSnapshot(category);
+        },
+      ).toList(),
+      products: (snap['products'] as List).map(
+        (product) {
+          return Product.fromSnapshot(product);
+        },
+      ).toList(),
+      openingHours: (snap['openingHours'] as List).map(
+        (openingHour) {
+          return OpeningHours.fromSnapshot(openingHour);
+        },
+      ).toList(),
     );
   }
 

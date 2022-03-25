@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_food_delivery_backend/repositories/restaurant/restaurant_repository.dart';
 import '/blocs/blocs.dart';
 import '/models/models.dart';
 
@@ -9,11 +10,16 @@ part 'product_event.dart';
 part 'product_state.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
+  final RestaurantRepository _restaurantRepository;
   final CategoryBloc _categoryBloc;
+  StreamSubscription? _restaurantSubscription;
   StreamSubscription? _categorySubscription;
 
-  ProductBloc({required CategoryBloc categoryBloc})
-      : _categoryBloc = categoryBloc,
+  ProductBloc({
+    required RestaurantRepository restaurantRepository,
+    required CategoryBloc categoryBloc,
+  })  : _restaurantRepository = restaurantRepository,
+        _categoryBloc = categoryBloc,
         super(ProductLoading()) {
     on<LoadProducts>(_onLoadProducts);
     on<AddProduct>(_onAddProduct);
@@ -29,13 +35,22 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         );
       } else {}
     });
+
+    _restaurantSubscription =
+        _restaurantRepository.getRestaurant().listen((restaurant) {
+      add(
+        LoadProducts(products: restaurant.products!),
+      );
+      _restaurantRepository.addRestaurant(restaurant);
+    });
   }
 
   void _onLoadProducts(
     LoadProducts event,
     Emitter<ProductState> emit,
   ) async {
-    await Future<void>.delayed(const Duration(seconds: 1));
+    // await Future<void>.delayed(const Duration(seconds: 1));
+
     emit(ProductLoaded(products: event.products));
   }
 

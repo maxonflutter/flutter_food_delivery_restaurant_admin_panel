@@ -1,13 +1,17 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_food_delivery_backend/blocs/settings/settings_bloc.dart';
+import 'package:flutter_food_delivery_backend/firebase_options.dart';
+import 'package:flutter_food_delivery_backend/repositories/restaurant/restaurant_repository.dart';
 import '/blocs/blocs.dart';
 import '/config/theme.dart';
 
 import 'models/models.dart';
 import 'screens/screens.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -26,10 +30,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => ProductBloc(
+            restaurantRepository: RestaurantRepository(),
             categoryBloc: BlocProvider.of<CategoryBloc>(context),
-          )..add(
-              LoadProducts(products: Product.products),
-            ),
+          )..add(const LoadProducts()),
         ),
         BlocProvider(
           create: (context) => SettingsBloc()

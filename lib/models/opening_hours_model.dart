@@ -31,6 +31,16 @@ class OpeningHours extends Equatable {
     );
   }
 
+  Map<String, dynamic> toDocument() {
+    return {
+      'id': id,
+      'day': day,
+      'openAt': openAt,
+      'closeAt': closeAt,
+      'isOpen': isOpen,
+    };
+  }
+
   factory OpeningHours.fromSnapshot(Map<String, dynamic> snap) {
     return OpeningHours(
       id: snap['id'],
