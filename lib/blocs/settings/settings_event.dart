@@ -10,18 +10,23 @@ abstract class SettingsEvent extends Equatable {
 class LoadSettings extends SettingsEvent {
   final Restaurant restaurant;
 
-  const LoadSettings({required this.restaurant});
+  const LoadSettings({this.restaurant = const Restaurant()});
 
   @override
   List<Object> get props => [restaurant];
 }
 
 class UpdateSettings extends SettingsEvent {
+  final bool isUpdateComplete;
   final Restaurant restaurant;
-  const UpdateSettings({required this.restaurant});
+
+  const UpdateSettings({
+    this.isUpdateComplete = false,
+    required this.restaurant,
+  });
 
   @override
-  List<Object> get props => [restaurant];
+  List<Object> get props => [isUpdateComplete, restaurant];
 }
 
 class UpdateOpeningHours extends SettingsEvent {

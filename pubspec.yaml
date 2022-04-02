@@ -37,6 +37,9 @@ dependencies:
   flutter_svg: ^1.0.0
   equatable: ^2.0.3
   flutter_bloc: ^8.0.1
+  cloud_firestore: ^3.1.10
+  firebase_core: ^1.13.1
+  flutterfire_ui: ^0.3.6+1
 
 dev_dependencies:
   flutter_test:
